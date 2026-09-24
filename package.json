@@ -1,0 +1,23 @@
+{
+  "name": "playwright-ai-framework",
+  "version": "1.0.0",
+  "description": "Feature-based Playwright test framework starter",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "framework"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.0.1"
+  }
+}
