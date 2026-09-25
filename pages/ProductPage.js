@@ -17,11 +17,13 @@ export class ProductPage extends BasePage {
     await expect(this.productList).toHaveCount(expectedCount);
   }
 
-  async openFirstProduct() {
+  async openFirstProduct(specName = 'general') {
     await this.productNames.first().click();
+    await this.takeStepScreenshot('first-product-opened', specName);
   }
 
-  async addFirstProductToCart() {
+  async addFirstProductToCart(specName = 'general') {
     await this.addToCartButton.click();
+    await this.takeStepScreenshot('first-product-added-to-cart', specName);
   }
 }

@@ -13,15 +13,18 @@ export class CartPage extends BasePage {
     this.cartLink = page.locator('.shopping_cart_link');
   }
 
-  async openCart() {
+  async openCart(specName = 'general') {
     await this.cartLink.click();
+    await this.takeStepScreenshot('cart-opened', specName);
   }
 
-  async expectItemCount(expectedCount) {
+  async expectItemCount(expectedCount, specName = 'general') {
     await expect(this.cartItems).toHaveCount(expectedCount);
+    await this.takeStepScreenshot(`cart-items-verified-${expectedCount}`, specName);
   }
 
-  async clickCheckout() {
+  async clickCheckout(specName = 'general') {
     await this.checkoutButton.click();
+    await this.takeStepScreenshot('checkout-clicked', specName);
   }
 }

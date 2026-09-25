@@ -20,17 +20,22 @@ export class LoginPage extends BasePage {
     await super.goto('/');
   }
 
-  async login(username, password) {
+  async login(username, password, specName = 'general') {
     // Fill in credentials and submit the form.
     await this.usernameInput.fill(username);
+    await this.takeStepScreenshot('username-filled', specName);
+
     await this.passwordInput.fill(password);
+    await this.takeStepScreenshot('password-filled', specName);
+
     await this.loginButton.click();
+    await this.takeStepScreenshot('login-button-clicked', specName);
   }
 
-  async loginAs(username, password) {
+  async loginAs(username, password, specName = 'general') {
     // Reusable helper: open page first, then log in.
-    await this.goto();
-    await this.login(username, password);
+    await this.goto(undefined, 'page-open', specName);
+    await this.login(username, password, specName);
   }
 
   async expectLoginError(message) {

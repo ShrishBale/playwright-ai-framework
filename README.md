@@ -68,6 +68,8 @@ Open Playwright UI mode:
 npm run test:ui
 ```
 
+Screenshots are captured for every test and saved under `screenshots/`. Videos and traces are disabled in this configuration.
+
 ## Environment Setup
 
 Copy the example file and configure your values:

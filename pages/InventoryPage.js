@@ -35,10 +35,13 @@ export class InventoryPage extends BasePage {
     await this.productNames.first().click();
   }
 
-  async logout() {
+  async logout(specName = 'general') {
     // Open the menu, wait for logout to become visible, then click it.
     await this.menuButton.click();
+    await this.takeStepScreenshot('menu-opened', specName);
+
     await this.logoutButton.waitFor({ state: 'visible', timeout: 15000 });
     await this.logoutButton.click();
+    await this.takeStepScreenshot('logout-clicked', specName);
   }
 }

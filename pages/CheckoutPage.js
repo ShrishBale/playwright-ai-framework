@@ -15,18 +15,27 @@ export class CheckoutPage extends BasePage {
     this.confirmationText = page.locator('.complete-header');
   }
 
-  async fillCustomerInfo(firstName, lastName, zipCode) {
+  async fillCustomerInfo(firstName, lastName, zipCode, specName = 'general') {
     await this.firstNameInput.fill(firstName);
+    await this.takeStepScreenshot('first-name-filled', specName);
+
     await this.lastNameInput.fill(lastName);
+    await this.takeStepScreenshot('last-name-filled', specName);
+
     await this.zipInput.fill(zipCode);
+    await this.takeStepScreenshot('postal-code-filled', specName);
+
     await this.continueButton.click();
+    await this.takeStepScreenshot('continue-button-clicked', specName);
   }
 
-  async finishCheckout() {
+  async finishCheckout(specName = 'general') {
     await this.finishButton.click();
+    await this.takeStepScreenshot('finish-button-clicked', specName);
   }
 
-  async expectOrderConfirmed() {
+  async expectOrderConfirmed(specName = 'general') {
     await expect(this.confirmationText).toContainText('Thank you for your order!');
+    await this.takeStepScreenshot('order-confirmed', specName);
   }
 }
