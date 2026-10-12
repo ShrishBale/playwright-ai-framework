@@ -2,9 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { config } from '../utils/config.js';
 
-// BasePage is the shared foundation for every page object.
-// It keeps common actions like navigation and waiting in one place.
+// BasePage is the shared foundation for all page objects in this framework.
+// Instead of repeating the same actions in every page class, we put them here once.
+// This keeps the code reusable and easier to understand for beginners.
 export class BasePage {
+  // runFolder stores the current test-run folder so all screenshots from one run go together.
   static runFolder = null;
 
   constructor(page, baseUrl = config.baseURL) {
@@ -12,6 +14,8 @@ export class BasePage {
     this.baseUrl = baseUrl;
   }
 
+  // This method cleans a step name so it can be used safely as a file name.
+  // Example: 'login button clicked' becomes 'login-button-clicked'.
   sanitizeStepName(stepName) {
     return (stepName || 'step')
       .toLowerCase()
@@ -19,6 +23,8 @@ export class BasePage {
       .replace(/^-+|-+$/g, '') || 'step';
   }
 
+  // This creates a new folder for each iteration of the test run.
+  // Example: screenshots/Iteration_09_25_2026_11_18_06
   static createRunFolder() {
     if (!BasePage.runFolder) {
       const now = new Date();
@@ -37,6 +43,8 @@ export class BasePage {
     return BasePage.runFolder;
   }
 
+  // This creates the final screenshot path based on the run folder and script name.
+  // Example: screenshots/Iteration_.../login/login-page-loaded-123456789.png
   getScreenshotPath(stepName, specName = 'general') {
     const scriptName = String(specName || 'general')
       .replace(/\.spec\.js$/i, '')
@@ -51,6 +59,7 @@ export class BasePage {
     return path.join(scriptFolder, `${safeStepName}-${Date.now()}.png`);
   }
 
+  // This method captures a screenshot right after a UI action or verification step.
   async takeStepScreenshot(stepName, specName = 'general', options = {}) {
     const screenshotPath = this.getScreenshotPath(stepName, specName);
     await this.page.screenshot({
@@ -61,6 +70,7 @@ export class BasePage {
     return screenshotPath;
   }
 
+  // Navigation helper: opens a URL and captures a screenshot for the page load.
   async goto(path = '/', stepName = 'page-open', specName = 'general') {
     const url = path.startsWith('http') ? path : `${this.baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
     await this.page.goto(url);
@@ -68,15 +78,18 @@ export class BasePage {
     await this.takeStepScreenshot(stepName, specName);
   }
 
+  // This waits for a locator to be visible before continuing.
   async waitForVisible(locator, timeout = config.defaultTimeout) {
     await locator.waitFor({ state: 'visible', timeout });
   }
 
+  // Generic click method used by page objects when they need a click with screenshot logging.
   async click(locator, stepName = 'click', specName = 'general') {
     await locator.click();
     await this.takeStepScreenshot(stepName, specName);
   }
 
+  // Generic fill method used when entering text fields and wanting a screenshot after entry.
   async fill(locator, value, stepName = 'fill', specName = 'general') {
     await locator.fill(value);
     await this.takeStepScreenshot(stepName, specName);

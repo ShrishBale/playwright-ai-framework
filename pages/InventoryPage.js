@@ -11,7 +11,9 @@ export class InventoryPage extends BasePage {
     this.inventoryList = page.locator('.inventory_list');
     this.productItems = page.locator('.inventory_item');
     this.productNames = page.locator('.inventory_item_name');
+    this.productPrices = page.locator('.inventory_item_price');
     this.title = page.locator('.title');
+    this.sortDropdown = page.locator('[data-test="product-sort-container"]');
 
     // Side menu selectors used for logout.
     this.menuButton = page.locator('#react-burger-menu-btn');
@@ -35,6 +37,18 @@ export class InventoryPage extends BasePage {
     await this.productNames.first().click();
   }
 
+  async sortProducts(option, specName = 'general') {
+    await this.sortDropdown.selectOption(option);
+    await this.takeStepScreenshot(`products-sorted-${option}`, specName);
+  }
+
+  async expectPricesSortedAscending() {
+    const prices = await this.productPrices.allTextContents();
+    const numericPrices = prices.map((price) => Number(price.replace('$', '')));
+    expect(numericPrices).toEqual([...numericPrices].sort((first, second) => first - second));
+  }
+
+  
   async logout(specName = 'general') {
     // Open the menu, wait for logout to become visible, then click it.
     await this.menuButton.click();

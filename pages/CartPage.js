@@ -11,6 +11,7 @@ export class CartPage extends BasePage {
     this.checkoutButton = page.locator('[data-test="checkout"]');
     this.cartItems = page.locator('.cart_item');
     this.cartLink = page.locator('.shopping_cart_link');
+    this.removeButtons = page.locator('[data-test^="remove-"]');
   }
 
   async openCart(specName = 'general') {
@@ -26,5 +27,10 @@ export class CartPage extends BasePage {
   async clickCheckout(specName = 'general') {
     await this.checkoutButton.click();
     await this.takeStepScreenshot('checkout-clicked', specName);
+  }
+
+  async removeFirstItem(specName = 'general') {
+    await this.removeButtons.first().click();
+    await this.takeStepScreenshot('first-cart-item-removed', specName);
   }
 }

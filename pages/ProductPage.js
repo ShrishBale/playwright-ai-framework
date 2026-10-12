@@ -10,6 +10,10 @@ export class ProductPage extends BasePage {
     this.productNames = page.locator('.inventory_item_name');
     this.productPrice = page.locator('.inventory_item_price');
     this.addToCartButton = page.locator('.btn_inventory').first();
+    this.detailsName = page.locator('.inventory_details_name');
+    this.detailsPrice = page.locator('.inventory_details_price');
+    this.detailsDescription = page.locator('.inventory_details_desc');
+    this.detailsImage = page.locator('.inventory_details_img');
   }
 
   async expectProductsDisplayed(expectedCount = 6) {
@@ -25,5 +29,13 @@ export class ProductPage extends BasePage {
   async addFirstProductToCart(specName = 'general') {
     await this.addToCartButton.click();
     await this.takeStepScreenshot('first-product-added-to-cart', specName);
+  }
+
+  async expectProductDetailsVisible(specName = 'general') {
+    await expect(this.detailsName).toBeVisible();
+    await expect(this.detailsPrice).toBeVisible();
+    await expect(this.detailsDescription).toBeVisible();
+    await expect(this.detailsImage).toBeVisible();
+    await this.takeStepScreenshot('product-details-verified', specName);
   }
 }
